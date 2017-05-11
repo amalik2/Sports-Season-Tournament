@@ -1,0 +1,2 @@
+Create teams, and register them for a season. Matches will be created for all registered teams, and each match will be assigned a date.
+Requires the amalik2/Custom-Calendar-Dates/ repository to use.
