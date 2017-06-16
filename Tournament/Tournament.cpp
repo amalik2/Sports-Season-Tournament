@@ -91,7 +91,7 @@ void Tournament::teamWonGame(Team * winner)
 
 		//std::cout << "WINNER MATCHUP: " << winner->getName() << std::endl;
 		getCurrentRound()->getMatchup(winner)->getLoser()->eliminate();
-		removeFromVector(activeParticipants, getCurrentRound()->getMatchup(winner)->getLoser());
+		VectorFunctions::removeFromVector(activeParticipants, getCurrentRound()->getMatchup(winner)->getLoser());
 
 		TournamentRound &currentRound = *getCurrentRound();
 		if (currentRound.teamWonMatchup(*winner)) {

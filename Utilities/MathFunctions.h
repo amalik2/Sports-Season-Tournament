@@ -1,5 +1,7 @@
 #pragma once
 
-// if denominator = 0, return numerator
-// else return numerator / denominator
-float ratio(float numerator, float denominator);
+namespace MathFunctions {
+	// if denominator = 0, return numerator
+	// else return numerator / denominator
+	float ratio(float numerator, float denominator);
+}

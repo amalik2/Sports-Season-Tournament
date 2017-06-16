@@ -1,7 +1,12 @@
 #pragma once
 
-// Returns a random integer from min to max
-int randint(int min, int max);
+namespace RandomFunctions
+{
 
-// Returns true if an event with the given chance % occurs
-bool randomChance(int chance);
+	// Returns a random integer from min to max
+	int randint(int min, int max);
+
+	// Returns true if an event with the given chance % occurs
+	bool randomChance(int chance);
+
+}

@@ -28,10 +28,10 @@ std::string Team::getName()
 float Team::getWinPercentage(bool tournament)
 {
 	if (tournament) {
-		return ratio(playoffStats.wins, playoffStats.wins + playoffStats.losses);
+		return MathFunctions::ratio(playoffStats.wins, playoffStats.wins + playoffStats.losses);
 	}
 	else {
-		return ratio(regStats.wins, regStats.wins + regStats.losses);
+		return MathFunctions::ratio(regStats.wins, regStats.wins + regStats.losses);
 	}
 }
 

@@ -102,8 +102,8 @@ void Season::simulate()
 
 			d.setTime(match.getDate().getHours(), 0, 0);
 			if (match.getDate().isTimeForEvent(d)) {
-				int score1 = randint(0, 7);
-				int score2 = randint(1, 6);
+				int score1 = RandomFunctions::randint(0, 7);
+				int score2 = RandomFunctions::randint(1, 6);
 				while (score1 == score2) {
 					score2++;
 				}
@@ -128,8 +128,8 @@ void Season::simulate()
 
 			d = match.getDate();
 
-			int score1 = randint(0, 7);
-			int score2 = randint(1, 6);
+			int score1 = RandomFunctions::randint(0, 7);
+			int score2 = RandomFunctions::randint(1, 6);
 			while (score1 == score2) {
 				score2++;
 			}
@@ -254,20 +254,20 @@ void Season::increaseSeasonStatus()
 int Season::getTotalPlayoffRounds() {
 
 	if (teams.size() <= 2)
-		return floor(teams.size() / 2);
+		return (int)floor(teams.size() / 2);
 
 	float base = log(teams.size() / 2) / log(2);
 	// Not enough teams, so return the floor instead
 	if (pow(2, ceil(base)) > teams.size()) {
-		return floor(base);
+		return (int)floor(base);
 	}
 
-	return ceil(base);
+	return (int)ceil(base);
 }
 
 int Season::getMaxTeamsInPlayoffs()
 {
-	return pow(2, getTotalPlayoffRounds());
+	return (int)pow(2, getTotalPlayoffRounds());
 }
 
 void Season::createSchedules(bool playoffs, Date date) {
@@ -364,7 +364,7 @@ void Season::createSchedules(bool playoffs, Date date) {
 			if (matchesRemaining == 0) {
 				// Update date to the next day, starting at a random hour
 				date.addDays(1);
-				date.setTime(MINIMUM_START_HOUR + randint(0, 2), 0, 0);
+				date.setTime(MINIMUM_START_HOUR + RandomFunctions::randint(0, 2), 0, 0);
 
 				// Change the index for the number of games for the next day
 				gpdIndex = (gpdIndex + 1) % GPD_LENGTH;
