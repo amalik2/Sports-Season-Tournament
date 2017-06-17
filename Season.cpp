@@ -11,8 +11,8 @@
 
 #include "Utilities\RandomFunctions.h"
 
-static const int MAX_TEAMS = 30;
-static const int GAMES_PLAYED = 16;
+static const int MAX_TEAMS = 300;
+static const int GAMES_PLAYED = 160;
 /*// The maximum number of matches that can be on at the same time
 const int MAX_CONCURRENT_GAMES = 1;
 
@@ -386,7 +386,7 @@ void Season::createSchedules(bool playoffs, Date date) {
 
 Team *Season::getTeamByIndex(int index)
 {
-	// Random access check first (useful before the playoffs)
+	/*// Random access check first (useful before the playoffs)
 	if (teams[index].getIndex() == index) {
 		return &teams[index];
 	}
@@ -396,7 +396,8 @@ Team *Season::getTeamByIndex(int index)
 			return &team;
 	}
 
-	return NULL;
+	return NULL;*/
+	return &teams[index];
 }
 
 void Season::createPlayoffSeeds()

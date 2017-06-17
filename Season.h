@@ -25,7 +25,8 @@ private:
 	// date is the start date for the matches
 	void createSchedules(bool playoffs, Date date);
 
-	// Get a team by their unique index
+	// Get a team by their unique index (>= 0)
+	// Undefined behaviour if index is invalid
 	Team *getTeamByIndex(int index);
 
 	// Assign playoff seeds to all teams, and eliminate those failing to make the playoffs
@@ -60,7 +61,7 @@ public:
 
 	// Officially start this season
 	// REQUIRES AN EVEN NUMBER OF TEAMS TO BE REGISTERED, AND ATLEAST 2 MUST BE REGISTERED
-	// An error will be thrown if those conditions are not met
+	// std::exception will be thrown if those conditions are not met
 	void start();
 
 	// Simulate the entire season
