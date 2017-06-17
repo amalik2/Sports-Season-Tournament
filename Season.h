@@ -25,10 +25,6 @@ private:
 	// date is the start date for the matches
 	void createSchedules(bool playoffs, Date date);
 
-	// Get a team by their unique index (>= 0)
-	// Undefined behaviour if index is invalid
-	Team *getTeamByIndex(int index);
-
 	// Assign playoff seeds to all teams, and eliminate those failing to make the playoffs
 	void createPlayoffSeeds();
 
