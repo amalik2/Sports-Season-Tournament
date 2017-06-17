@@ -11,8 +11,8 @@
 
 #include "Utilities\RandomFunctions.h"
 
-static const int MAX_TEAMS = 300;
-static const int GAMES_PLAYED = 160;
+static const int MAX_TEAMS = 30;
+static const int GAMES_PLAYED = 16;
 /*// The maximum number of matches that can be on at the same time
 const int MAX_CONCURRENT_GAMES = 1;
 
@@ -272,7 +272,7 @@ int Season::getMaxTeamsInPlayoffs()
 
 void Season::createSchedules(bool playoffs, Date date) {
 
-	if (playoffs) {
+	if (playoffs && playoffMatches.size() == 0) {
 		playoffMatches.reserve(getTotalPlayoffGames());
 	}
 
@@ -380,24 +380,8 @@ void Season::createSchedules(bool playoffs, Date date) {
 		std::cout << match.getDate().getDisplayDate() << match.getAwayTeam().getName() << " vs. " << match.getHomeTeam().getName() << std::endl;
 	}
 	*/
-	std::cout << "Total = " << matchList.size() << std::endl;
+	std::cout << "Total Matches = " << matchList.size() << std::endl;
 	
-}
-
-Team *Season::getTeamByIndex(int index)
-{
-	/*// Random access check first (useful before the playoffs)
-	if (teams[index].getIndex() == index) {
-		return &teams[index];
-	}
-	// Iterate through teams to find the correct one
-	for (Team &team : teams) {
-		if (team.getIndex() == index)
-			return &team;
-	}
-
-	return NULL;*/
-	return &teams[index];
 }
 
 void Season::createPlayoffSeeds()
