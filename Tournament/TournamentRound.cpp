@@ -17,7 +17,6 @@ TournamentRound::~TournamentRound()
 // one > two if true
 // one < two is better
 bool compareDivisions(Team *one, Team *two) {
-	// TODO: test
 
 	if (one->getCurrentPlayoffDivision() != two->getCurrentPlayoffDivision())
 		return one->getCurrentPlayoffDivision() < two->getCurrentPlayoffDivision();

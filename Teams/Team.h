@@ -59,15 +59,20 @@ public:
 	int getPlayoffSeed();
 	void setPlayoffSeed(int s);
 
-	TeamStats &getRegSeasonStats();
-	TeamStats &getPlayoffStats();
+	int getWins(bool playoffs = false);
+	int getLosses(bool playoffs = false);
+	int getTotalPoints(bool playoffs = false);
+
+	void increaseWins(bool playoffs = false);
+	void increaseLosses(bool playoffs = false);
+	void increaseTotalPoints(bool playoffs = false);
 
 	// Return (Total matchups, # games this team won, # games other team won)
 	std::tuple<int, int, int> getMatchupStats(Team &other);
 
 	// Return the match that this team plays on the specified date
 	// Returns null if the team has no match on that date
-	Match *getMatchOnDay(Date date);
+	Match *getMatchOnDay(DateTime date);
 
 	// Alter the team record
 	// if won is true, then adds a win. Otherwise, add a loss
@@ -80,7 +85,6 @@ public:
 		return getIndex() == other->getIndex();
 	}
 
-	// TODO: see if this causes error compiling
 	bool operator== (Team &other) {
 		return getIndex() == other.getIndex();
 	}
@@ -108,8 +112,8 @@ public:
 			return wlr1 > wlr2;
 
 		// Attempt to compare based on number of wins
-		if (one->getRegSeasonStats().wins != two->getRegSeasonStats().wins) {
-			return one->getRegSeasonStats().wins > two->getRegSeasonStats().wins;
+		if (one->getWins() != two->getWins()) {
+			return one->getWins() > two->getWins();
 		}
 
 		// Attempt to compare based on head to head record
@@ -123,8 +127,8 @@ public:
 		}
 
 		// Attempt to compare based on total points scored
-		int pts1 = one->getRegSeasonStats().points;
-		int pts2 = two->getRegSeasonStats().points;
+		int pts1 = one->getTotalPoints();
+		int pts2 = two->getTotalPoints();
 
 		if (pts1 != pts2)
 			return pts1 > pts2;

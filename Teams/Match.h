@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Date.h"
+#include "Date/DateTime.h"
 
 // Forward declaration of team
 class Team;
@@ -21,14 +21,14 @@ private:
 	int round;
 
 	// The date this match is played on
-	Date date;
+	DateTime date;
 
 	// Pointer to playoffs object to inform it of a tournament matchup game being completed
 	Tournament *playoffs;
 
 public:
-	Match(Team &h, Team &a, Date d);
-	Match(Team &h, Team &a, Date d, Tournament *tourn);
+	Match(Team &h, Team &a, DateTime d);
+	Match(Team &h, Team &a, DateTime d, Tournament *tourn);
 	~Match();
 
 	Team *getWinner();
@@ -59,7 +59,10 @@ public:
 	bool isFinished();
 
 	// Get the date this match will be played on
-	Date &getDate();
+	DateTime getDate();
+
+	// Get whether this is a playoff match or not
+	bool isPlayoffs();
 
 };
 

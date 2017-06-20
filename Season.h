@@ -3,7 +3,8 @@
 #include <vector>
 #include <tuple>
 
-#include "Tournament\Tournament.h"
+#include "Tournament/Tournament.h"
+#include "Calendar/Calendar.h"
 
 class Season
 {
@@ -11,6 +12,8 @@ class Season
 private:
 	// Represents what state the season is currently in (offseason, regular season, playoffs, finished)
 	int seasonStatus;
+
+	Calendar calendar;
 
 	std::vector<Team> teams;
 	std::vector<Match> matches;
@@ -23,7 +26,7 @@ private:
 
 	// Create the schedules for all teams
 	// date is the start date for the matches
-	void createSchedules(bool playoffs, Date date);
+	void createSchedules(bool playoffs, DateTime date);
 
 	// Assign playoff seeds to all teams, and eliminate those failing to make the playoffs
 	void createPlayoffSeeds();
@@ -39,7 +42,7 @@ private:
 
 	// Start the next round of the playoffs
 	// Returns whether the next round was started or not
-	bool nextPlayoffRound(Date d);
+	bool nextPlayoffRound(DateTime d);
 
 	// Change the season status code to s
 	void setSeasonStatus(int s);

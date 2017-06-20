@@ -64,14 +64,43 @@ void Team::setPlayoffSeed(int s)
 	seed = s;
 }
 
-TeamStats & Team::getRegSeasonStats()
+int Team::getWins(bool playoffs)
 {
-	return regStats;
+	return playoffs ? playoffStats.wins : regStats.wins;
 }
 
-TeamStats & Team::getPlayoffStats()
+int Team::getLosses(bool playoffs)
 {
-	return playoffStats;
+	return playoffs ? playoffStats.losses : regStats.losses;
+}
+
+int Team::getTotalPoints(bool playoffs)
+{
+	return playoffs ? playoffStats.points : regStats.points;
+}
+
+void Team::increaseWins(bool playoffs)
+{
+	if (playoffs)
+		playoffStats.wins++;
+	else
+		regStats.wins++;
+}
+
+void Team::increaseLosses(bool playoffs)
+{
+	if (playoffs)
+		playoffStats.losses++;
+	else
+		regStats.losses++;
+}
+
+void Team::increaseTotalPoints(bool playoffs)
+{
+	if (playoffs)
+		playoffStats.points++;
+	else
+		regStats.points++;
 }
 
 std::tuple<int, int, int> Team::getMatchupStats(Team & other)
@@ -101,7 +130,7 @@ std::tuple<int, int, int> Team::getMatchupStats(Team & other)
 	return std::tuple<int, int, int>(total, wins, otherWins);
 }
 
-Match * Team::getMatchOnDay(Date date)
+Match * Team::getMatchOnDay(DateTime date)
 {
 	for (Match *& match : matches) {
 		if (!match->getDate().isSameDay(date)) {

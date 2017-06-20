@@ -9,7 +9,10 @@
 #include <iostream>
 #include <exception>
 
-#include "Utilities\RandomFunctions.h"
+#include "Utilities/RandomFunctions.h"
+
+#include "Calendar/Calendar.h"
+#include "MatchStartEvent.h"
 
 static const int MAX_TEAMS = 30;
 static const int GAMES_PLAYED = 16;
@@ -36,13 +39,14 @@ const int MINIMUM_START_HOUR = 16;
 const int MAXIMUM_START_HOUR = 22;
 
 // The date for the first game of the season
-static Date SEASON_START(1180, 10, 30);
+static DateTime SEASON_START(1880, 10, 30);
 
 // The date for the final game of the season
-static Date SEASON_END(1181, 2, 9);
+/*static DateTime SEASON_END(1881, 2, 9);
 
 // The date for the final playoff game of the season
-static Date PLAYOFFS_END(1181, 3, 24);
+static DateTime PLAYOFFS_END(1881, 3, 24);
+*/
 
 // Number of hours a game will start after the previous one has started
 const int HOURS_BETWEEN_GAMES = 2;
@@ -51,7 +55,7 @@ const int HOURS_BETWEEN_GAMES = 2;
 const int GPD_LENGTH = 6;
 const int GAMES_PER_DAY[GPD_LENGTH] = { 3, 2, 3, 2, 1, 3 };
 
-Season::Season()
+Season::Season() : calendar(SEASON_START)
 {
 	seasonStatus = OFFSEASON;
 
@@ -79,66 +83,45 @@ void Season::start()
 
 	if (seasonStatus == OFFSEASON) {
 		seasonStatus = REGULAR;
+		// TODO calendar.getCurrentDate()
 		createSchedules(false, SEASON_START);
 	}
 }
 
 void Season::simulate()
 {
+
+	// TODO: account for different times in CalendarEvent isTimeForEvent, and then change this to 3600 (1 hour)
+	static const int ADVANCE_SECONDS = 86400;
+
 	start();
-	Date d = SEASON_START;
+	DateTime d;
 
-	while (d.isBefore(SEASON_END)) {
-		for (Match &match : matches) {
-
-			if (match.isFinished()) {
-				if (&match == &matches.back()) {
-					d = SEASON_END;
-					//std::cout << " FINISHED REGULAR SEASON " << std::endl;
-					break;
-				}
-				continue;
-			}
-
-			d.setTime(match.getDate().getHours(), 0, 0);
-			if (match.getDate().isTimeForEvent(d)) {
-				int score1 = RandomFunctions::randint(0, 7);
-				int score2 = RandomFunctions::randint(1, 6);
-				while (score1 == score2) {
-					score2++;
-				}
-				match.start();
-				match.setScore(score1, true);
-				match.setScore(score2, false);
-				match.finish();
-			}
-			else {
-				d.addDays(1);
-				break;
-			}
-		}
+	for (Match &match : matches) {
+		d = match.getDate();
+		std::shared_ptr<CalendarEvent> matchEvent = std::make_shared<MatchStartEvent>(match, d);
+		calendar.addEvent(matchEvent);
 	}
-	//std::cout << " FINISHED REGULAR SEASON 2 " << std::endl;
+
+	while (!matches.back().isFinished())
+		calendar.advanceTime(ADVANCE_SECONDS);
+
+	//std::cout << " FINISHED REGULAR SEASON " << std::endl;
 	increaseSeasonStatus();
 
 	while (true) {
 		for (Match &match : playoffMatches) {
+
 			if (match.isFinished() || !match.getAwayTeam().isAliveInPlayoffs() || !match.getHomeTeam().isAliveInPlayoffs())
 				continue;
 
 			d = match.getDate();
-
-			int score1 = RandomFunctions::randint(0, 7);
-			int score2 = RandomFunctions::randint(1, 6);
-			while (score1 == score2) {
-				score2++;
-			}
-			match.start();
-			match.setScore(score1, true);
-			match.setScore(score2, false);
-			match.finish();
-
+			std::shared_ptr<CalendarEvent> matchEvent = std::make_shared<MatchStartEvent>(match, d);
+			calendar.addEvent(matchEvent);
 		}
+
+		while (calendar.getEventsOnDate(calendar.getCurrentDate()) > 0 || calendar.getCurrentDate() < playoffMatches.back().getDate())
+			calendar.advanceTime(ADVANCE_SECONDS);
 
 		if (playoffTournament.getWinner() != NULL) {
 			break;
@@ -150,7 +133,7 @@ void Season::simulate()
 			std::cout << m.getHigherSeed().getName() << " vs. " << m.getLowerSeed().getName() << " NULLWIN? " << (m.getWinner() == NULL) << std::endl;
 		}*/
 
-		nextPlayoffRound(d);
+		nextPlayoffRound(calendar.getCurrentDate());
 		increaseSeasonStatus();
 
 	}
@@ -163,10 +146,11 @@ void Season::startPlayoffs()
 	createPlayoffSeeds();
 	std::vector<Team*> activeTeams = getTeams(true, true);
 	playoffTournament.start(activeTeams);
-	createSchedules(true, SEASON_END);
+	// TODO
+	createSchedules(true, calendar.getCurrentDate());//SEASON_END);
 }
 
-bool Season::nextPlayoffRound(Date d)
+bool Season::nextPlayoffRound(DateTime d)
 {
 
 	int rnd = playoffTournament.getCurrentRoundNumber();
@@ -270,7 +254,7 @@ int Season::getMaxTeamsInPlayoffs()
 	return (int)pow(2, getTotalPlayoffRounds());
 }
 
-void Season::createSchedules(bool playoffs, Date date) {
+void Season::createSchedules(bool playoffs, DateTime date) {
 
 	if (playoffs && playoffMatches.size() == 0) {
 		playoffMatches.reserve(getTotalPlayoffGames());

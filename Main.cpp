@@ -19,7 +19,7 @@ int main() {
 	int i = 0;
 	for (auto &team : teams) {
 		//team->getRegSeasonStats().wins += i++;
-		std::cout << team->getName() << " " << team->getRegSeasonStats().wins << " " << team->getRegSeasonStats().losses << std::endl;
+		std::cout << team->getName() << " " << team->getWins() << " " << team->getLosses() << std::endl;
 	}
 	
 	return 0;

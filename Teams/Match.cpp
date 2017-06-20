@@ -6,13 +6,13 @@
 static const int HOME = 0, AWAY = 1;
 static const int NOT_STARTED = 0, MAX_ROUNDS = 1, FINISHED = MAX_ROUNDS + 1;
 
-Match::Match(Team &h, Team &a, Date d) : home(h), away(a) {
+Match::Match(Team &h, Team &a, DateTime d) : home(h), away(a) {
 	scores[0] = 0;
 	scores[1] = 0;
 	date = d;
 }
 
-Match::Match(Team & h, Team & a, Date d, Tournament * tourn) : home(h), away(a)
+Match::Match(Team & h, Team & a, DateTime d, Tournament * tourn) : home(h), away(a)
 {
 	scores[0] = 0;
 	scores[1] = 0;
@@ -90,7 +90,6 @@ bool Match::finish()
 	winner->alterRecord(true);
 	getLoser()->alterRecord(false);
 
-	// TODO: Do this some other way?
 	if (playoffs != NULL) {
 		playoffs->teamWonGame(winner);
 	}
@@ -104,7 +103,11 @@ bool Match::isFinished()
 	return round == FINISHED;
 }
 
-Date & Match::getDate()
+DateTime Match::getDate()
 {
 	return date;
+}
+
+bool Match::isPlayoffs() {
+	return playoffs != NULL;
 }
