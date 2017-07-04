@@ -5,7 +5,6 @@
 #include <tuple>
 
 #include "Match.h"
-#include "../Roster.h";
 
 struct TeamStats {
 	int wins = 0;
@@ -36,9 +35,6 @@ private:
 
 	// Pointers to an element in the current season match list
 	std::vector<Match*> matches;
-
-	// player roster
-	Roster roster;
 
 public:
 	Team(std::string tname);
@@ -103,7 +99,6 @@ public:
 
 	// Compare functor. Lower seed = better
 	// returns true if team one is before team two
-	
 	static bool compareTeams(Team *&one, Team *&two);
 
 };
