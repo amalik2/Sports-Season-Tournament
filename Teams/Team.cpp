@@ -79,22 +79,6 @@ int Team::getTotalPoints(bool playoffs)
 	return playoffs ? playoffStats.points : regStats.points;
 }
 
-void Team::increaseWins(bool playoffs)
-{
-	if (playoffs)
-		playoffStats.wins++;
-	else
-		regStats.wins++;
-}
-
-void Team::increaseLosses(bool playoffs)
-{
-	if (playoffs)
-		playoffStats.losses++;
-	else
-		regStats.losses++;
-}
-
 void Team::increaseTotalPoints(bool playoffs)
 {
 	if (playoffs)
