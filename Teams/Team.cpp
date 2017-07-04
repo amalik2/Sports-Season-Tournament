@@ -177,3 +177,38 @@ void Team::setCurrentPlayoffDivision(int newDiv)
 {
 	division = newDiv;
 }
+
+bool Team::compareTeams(Team *&one, Team *&two) {
+
+	// Attempt to compare based on win loss ratio
+	float wlr1 = one->getWinPercentage(false);
+	float wlr2 = two->getWinPercentage(false);
+
+	if (wlr1 != wlr2)
+		return wlr1 > wlr2;
+
+	// Attempt to compare based on number of wins
+	if (one->getWins() != two->getWins()) {
+		return one->getWins() > two->getWins();
+	}
+
+	// Attempt to compare based on head to head record
+	std::tuple<int, int, int> hhstats = one->getMatchupStats(*two);
+
+	int wins1 = std::get<1>(hhstats);
+	int wins2 = std::get<2>(hhstats);
+
+	if (wins1 != wins2) {
+		return wins1 > wins2;
+	}
+
+	// Attempt to compare based on total points scored
+	int pts1 = one->getTotalPoints();
+	int pts2 = two->getTotalPoints();
+
+	if (pts1 != pts2)
+		return pts1 > pts2;
+
+	// Use name as a fallback, since "return true" results in an invalid comparator error
+	return one->getName() > two->getName();
+}
