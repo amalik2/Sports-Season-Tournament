@@ -63,8 +63,6 @@ public:
 	int getLosses(bool playoffs = false);
 	int getTotalPoints(bool playoffs = false);
 
-	void increaseWins(bool playoffs = false);
-	void increaseLosses(bool playoffs = false);
 	void increaseTotalPoints(bool playoffs = false);
 
 	// Return (Total matchups, # games this team won, # games other team won)
